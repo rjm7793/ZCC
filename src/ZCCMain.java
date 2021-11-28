@@ -1,6 +1,8 @@
+import com.sun.net.httpserver.BasicAuthenticator;
+
 /**
- * @author Riley Muessig
- * File: ZCCMain
+ * @author Riley Muessig (rjm7793@rit.edu)
+ * File: ZCCMain.java
  * Description: Functions as the entry point for the ticket viewer program. Handles
  * program arguments.
  */
@@ -25,6 +27,11 @@ public class ZCCMain {
         String subdomain = args[0];
         String username = args[1];
         String password = args[2];
+
+        RequestHandler requestHandler = new RequestHandler(subdomain, username, password);
+        TicketViewer tickerViewer = new TicketViewer(requestHandler);
+        System.out.println("Welcome to the Ticket Viewer!");
+
     }
 
 }

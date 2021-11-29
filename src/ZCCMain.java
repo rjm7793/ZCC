@@ -32,6 +32,7 @@ public class ZCCMain {
         TicketViewer ticketViewer = new TicketViewer(requestHandler);
         System.out.println("Welcome to the Ticket Viewer!");
         ticketViewer.mainMenu();
+        System.out.println("Goodbye! Thanks for using the Ticket Viewer!");
     }
 
 }

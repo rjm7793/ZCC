@@ -1,3 +1,6 @@
+import com.google.gson.Gson;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -9,11 +12,10 @@ import java.util.Scanner;
 public class TicketViewer {
 
     private RequestHandler request;
-    private Scanner scanner;
+    private TicketBuilder ticketBuilder;
 
     public TicketViewer(RequestHandler request) {
         this.request = request;
-        this.scanner = new Scanner(System.in);
     }
 
     /**
@@ -30,7 +32,28 @@ public class TicketViewer {
     }
 
     public void viewAllTickets() {
+        HttpResponse<String> response = request.getAllTickets(RequestHandler.GET_TICKETS);
+        if (!request.validRequest(response)) {
+            return;
+        }
+        String json = response.body();
+        this.ticketBuilder = new TicketBuilder(json);
 
+        ArrayList<Ticket> allTickets = new ArrayList<>();
+        // builds the ticket list by parsing the JSON from the API
+        while (true) {
+            allTickets.addAll(ticketBuilder.parseTickets());
+            String nextPageURL = ticketBuilder.nextPage();
+            if (nextPageURL == null) {
+                break;
+            } else {
+                response = request.getAllTickets(nextPageURL);
+                if (!request.validRequest(response)) {
+                    return;
+                }
+                ticketBuilder.setJson(response.body());
+            }
+        }
     }
 
 
@@ -43,8 +66,9 @@ public class TicketViewer {
      * @param numChoices the number of options to choose from
      * @return a valid input value, representing the choice made
      */
-    public int numMenu(String menu, int numChoices) {
+    public static int numMenu(String menu, int numChoices) {
         int input;
+        Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Select an option:");
             System.out.println(menu);
@@ -58,6 +82,7 @@ public class TicketViewer {
             if (input >= numChoices || input < 0) {
                 System.out.println("Please choose a valid option.\n");
             } else {
+                scanner.close();
                 return input;
             }
         }

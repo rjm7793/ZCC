@@ -23,16 +23,17 @@ public class RequestHandler {
      */
     private static final Map<Integer, String> statusCodes = Map.of(
             400, "Bad request.",
-            401, "Unauthorized request",
-            403, "Forbidden request",
-            404, "Request not found",
-            500, "Server error"
+            401, "Unauthorized request.",
+            403, "Forbidden request.",
+            404, "Request not found.",
+            429, "Rate limit reached, too many requests.",
+            500, "Server error."
     );
 
     /**
      * The route to get all tickets from the Zendesk API
      */
-    private static final String GET_TICKETS = "/api/v2/tickets";
+    public static final String GET_TICKETS = "/api/v2/tickets";
 
     public RequestHandler(String subdomain, String username, String password) {
         this.baseURL = "https://" + subdomain + ".zendesk.com";
@@ -46,11 +47,11 @@ public class RequestHandler {
      *
      * @return the HTTP response returned from the API
      */
-    public HttpResponse<String> getAllTickets() {
+    public HttpResponse<String> getAllTickets(String path) {
         try {
             HttpRequest request = HttpRequest.newBuilder().uri(URI.create(
-                    baseURL + GET_TICKETS)).header("Authorization", "Basic " + auth)
-                    .build();
+                    baseURL + path)).header("Authorization", "Basic " + auth)
+                    .header("Accept", "application/json").build();
 
             HttpResponse<String> response = client.send(request,
                     HttpResponse.BodyHandlers.ofString());

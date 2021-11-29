@@ -16,6 +16,23 @@ public class TicketViewer {
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Outputs the main menu, asking whether the user would like to
+     * view all tickets or exit the program. Performs the action
+     * that was chosen by the user.
+     */
+    public void mainMenu() {
+        int input = numMenu("0. View all tickets\n" +
+                "1. Exit program", 2);
+        if (input == 0) {
+            viewAllTickets();
+        }
+    }
+
+    public void viewAllTickets() {
+
+    }
+
 
     /**
      * Acts as a template for taking input from a given numbered menu.

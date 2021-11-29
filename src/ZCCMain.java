@@ -29,9 +29,9 @@ public class ZCCMain {
         String password = args[2];
 
         RequestHandler requestHandler = new RequestHandler(subdomain, username, password);
-        TicketViewer tickerViewer = new TicketViewer(requestHandler);
+        TicketViewer ticketViewer = new TicketViewer(requestHandler);
         System.out.println("Welcome to the Ticket Viewer!");
-
+        ticketViewer.mainMenu();
     }
 
 }

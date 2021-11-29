@@ -28,4 +28,33 @@ public class Ticket {
         this.createdDate = LocalDateTime.parse(dateString.substring(0, 19),
                 DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
+
+    public int getID() {
+        return id;
+    }
+
+    public int getRequester() {
+        return requester;
+    }
+
+    public int getAssignee() {
+        return assignee;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getDate() {
+        return createdDate.getMonthValue() + "/" + createdDate.getDayOfMonth() + "/" +
+                createdDate.getYear();
+    }
+
+    public String getTime() {
+        return createdDate.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
 }

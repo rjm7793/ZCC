@@ -26,19 +26,43 @@ public class TicketBuilder {
         JsonArray jsonArray = jsonObj.get("tickets").getAsJsonArray();
         ArrayList<Ticket> tickets = new ArrayList<>();
         for (int i = 0; i < jsonArray.size(); i++) {
-            JsonObject ticketJson = jsonArray.get(i).getAsJsonObject();
-            int id = ticketJson.get("id").getAsInt();
-            int requesterID = ticketJson.get("requester_id").getAsInt();
-            int assigneeID = ticketJson.get("assignee_id").getAsInt();
-            String subject = ticketJson.get("subject").getAsString();
-            String description = ticketJson.get("description").getAsString();
-            String createdAt = ticketJson.get("created_at").getAsString();
+            try {
+                JsonObject ticketJson = jsonArray.get(i).getAsJsonObject();
 
-            Ticket ticket = new Ticket(id, requesterID, assigneeID, subject,
-                    description, createdAt);
-            tickets.add(ticket);
+                Ticket ticket = createTicket(ticketJson);
+                tickets.add(ticket);
+            } catch (UnsupportedOperationException ignored) {
+                // ticket does not have correct fields, so it is ignored
+                ;
+            }
         }
         return tickets;
+    }
+
+    /**
+     * Creates a Ticket from a given JsonObject. Parses for ticket ID,
+     * requester ID, assignee ID, ticket subject, ticket creation date,
+     * and ticket description. Ticket description is optional.
+     *
+     * @param ticketJson the JsonObject to read from
+     * @return a Ticket with data parsed from the JSON
+     */
+    public Ticket createTicket(JsonObject ticketJson) {
+        int id = ticketJson.get("id").getAsInt();
+        int requesterID = ticketJson.get("requester_id").getAsInt();
+        int assigneeID = ticketJson.get("assignee_id").getAsInt();
+
+        JsonElement descriptionJson = ticketJson.get("description");
+        String description = "";
+        if (!descriptionJson.isJsonNull()) {
+            description = descriptionJson.getAsString();
+        }
+
+        String subject = ticketJson.get("subject").getAsString();
+        String createdAt = ticketJson.get("created_at").getAsString();
+
+        return new Ticket(id, requesterID, assigneeID, subject,
+                description, createdAt);
     }
 
     public void setJson(String json) {

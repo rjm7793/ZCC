@@ -1,6 +1,6 @@
 # Riley Muessig ZCC
 
-#Usage:
+Usage:
 Download the repository and open it up in the Java
 IDE of your choice (I used IntelliJ). In order to 
 run the program, run ZCCMain.java. To pass in the

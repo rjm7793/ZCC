@@ -168,7 +168,7 @@ public class TicketViewer {
      * @param ticket The Ticket to print the details of
      */
     public void printATicket(Ticket ticket) {
-        System.out.println("\nTicket # " + ticket.getID());
+        System.out.println("\nTicket #" + ticket.getID());
         System.out.println("Subject: " + ticket.getSubject());
         System.out.println("Description: " + ticket.getDescription());
         System.out.println("Requested by " + ticket.getRequester() + " on " + ticket.getDate() +

@@ -1,5 +1,6 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * @author Riley Muessig (rjm7793@rit.edu)
@@ -24,9 +25,17 @@ public class Ticket {
         this.description = description;
         // converts the date string to a format that is parsable by LocalDateTime
         // using the ISO_LOCAL_DATE_TIME formatting.
-        dateString = dateString.substring(0, 19);
-        this.createdDate = LocalDateTime.parse(dateString.substring(0, 19),
-                DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        if (dateString.length() != 20) {
+            createdDate = null;
+        } else {
+            dateString = dateString.substring(0, 19);
+            try {
+                this.createdDate = LocalDateTime.parse(dateString,
+                        DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            } catch (DateTimeParseException e) {
+                createdDate = null;
+            }
+        }
     }
 
     public int getID() {
@@ -50,11 +59,17 @@ public class Ticket {
     }
 
     public String getDate() {
+        if (createdDate == null) {
+            return "N/A";
+        }
         return createdDate.getMonthValue() + "/" + createdDate.getDayOfMonth() + "/" +
                 createdDate.getYear();
     }
 
     public String getTime() {
+        if (createdDate == null) {
+            return "N/A";
+        }
         return createdDate.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 }
